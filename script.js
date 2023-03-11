@@ -25,7 +25,7 @@ let controls = {
 let snake = {
     'direction': [+1, +0], //  [x, y]
     'body': [
-        [0, 0],
+        [1, 0],
         [-1, 0],
         [-2, 0],
         [-3, 0],
@@ -55,7 +55,7 @@ function translateDirection(newDir) {
         'a': [-1, +0],
         's': [+0, +1],
         'd': [+1, +0],
-    }[newDir]
+    } [newDir]
 }
 
 function moveSnake() {
@@ -63,16 +63,23 @@ function moveSnake() {
     snake.body[0][0] += snake.direction[0];
     snake.body[0][1] += snake.direction[1];
     for (let i = snake.body.length - 1; i >= 0; i--) {
-        console.log(i, i - 1)
-        console.log(snake.body[i], snake.body[i - 1])
-        if (i - 1 >= 0)
-            snake.body[i] = snake.body[i - 1];
+        //console.log(i, i - 1)
+        //console.log(snake.body[i], snake.body[i - 1])
+        if (i - 1 >= 0) {
+            snake.body[i][0] = snake.body[i - 1][0];
+            snake.body[i][1] = snake.body[i - 1][1];
+        }
         displaySnakePart(snake.body[i][0], snake.body[i][1])
     }
     console.log(snake)
 }
 
+function growSnake() {
+    snake.body.push(snake.body[snake.body.length - 1]);
+}
+
 function displaySnakePart(x, y) {
+    console.log(x, y)
     ctx.fillStyle = "green";
     ctx.fillRect(rectX + (rectSize * x), rectY + (rectSize * y), rectSize, rectSize); // snek
 }
@@ -88,3 +95,10 @@ function display() {
     ctx.fillStyle = "white";
     ctx.fillRect(rectX + 20, rectY + 20, rectSize, rectSize); // food
 }
+
+function gameLoop() {
+    moveSnake();
+    setTimeout(gameLoop, 500);
+}
+
+gameLoop();
